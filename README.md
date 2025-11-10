@@ -25,7 +25,7 @@ Players can find, install, and operate **desktop computers** as mining rigs. Ove
 - ⚡ **Dynamic Energy Usage** — mining efficiency based on available power.  
 - 💰 **Reward System** — tangible in-game crypto rewards with trade or crafting potential.  
 - 💬 **Expanded Admin Tools** — better debugging, balance controls, and event triggers.  
-
+- 🕵️‍♂️ **Cybercrime & Hacking** — other players can **hack** discovered mining rigs/computers to steal or take control of mining progress **if** they meet server-designated requirements (a minimum **Lockpicking** and **Electronics** level). Server hosts will be able to configure the required skill thresholds and toggle hacking on/off for balance and roleplay reasons.
 ---
 
 ## 🧩 Installation
