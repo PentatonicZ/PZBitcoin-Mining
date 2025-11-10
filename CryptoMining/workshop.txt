@@ -1,0 +1,8 @@
+version=1
+title=Crypto Mining
+description=This is my first mod, more so a item I wanted to see on a server I play. If you like it, cool - If not....
+description=
+description=The mod looks at vanilla computer tiles / objects. The player can right click - then Start CryptoMining / Start CryptoMining.
+description=Tracks mining state on the computer object (safe for MP). Future add - Track steamid with job for appropriate payout. 
+tags=
+visibility=public
