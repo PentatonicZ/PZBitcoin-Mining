@@ -23,7 +23,7 @@ Using vanilla Computers Players can find, install, and operate mining rigs. Over
 - 🎵 **Computer Adio** + Ambient computer noise that attracts Z's
 - 💻 **Lifetime Earnings** - View lifetime earnings. 
 - 🔥 **Overheating System** — rigs that overheat without proper ventilation or cooling.  
-- ⚡ **Dynamic Energy Usage** — mining efficiency based on available power.  
+- ⚡ **Dynamic Energy Usage** — mining efficiency based on available power.
 - 💰 **Reward System** — tangible in-game crypto rewards with trade or crafting potential.  
 - 🕵️‍♂️ **Cybercrime & Hacking** — other players can **hack** discovered mining rigs/computers to steal or take control of mining progress **if** they meet server-designated requirements (a minimum **Lockpicking** and **Electronics** level). Server hosts will be able to configure the required skill thresholds and toggle hacking on/off for balance and roleplay reasons.
 ---
