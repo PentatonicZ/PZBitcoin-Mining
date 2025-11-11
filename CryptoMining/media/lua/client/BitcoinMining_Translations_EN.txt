@@ -3,3 +3,6 @@ StartStop_StartMining = Start Cryptomining (BikiniTools)
 StartStop_StopMining = Stop Cryptomining
 Tooltip_NoPower = Requires electricity to operate.
 
+StartStop_TurnOnComputer = Turn On Computer
+StartStop_TurnOffComputer = Turn Off Computer
+Tooltip_ComputerOff = Computer is turned off.
