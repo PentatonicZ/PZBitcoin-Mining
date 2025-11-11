@@ -20,7 +20,9 @@ Players can find, install, and operate **desktop computers** as mining rigs. Ove
 
 ---
 
-## 🚧 Future Plans
+## 🚧 Future Plans / To Do
+- 🎵 **Computer Adio** + Ambient computer noise that attracts Z's
+- 💻 **Expand UI** - View jobs and lifetime earnings. 
 - 🔥 **Overheating System** — rigs that overheat without proper ventilation or cooling.  
 - ⚡ **Dynamic Energy Usage** — mining efficiency based on available power.  
 - 💰 **Reward System** — tangible in-game crypto rewards with trade or crafting potential.  
