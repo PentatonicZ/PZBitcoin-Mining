@@ -25,9 +25,16 @@ Using vanilla Computers Players can find, install, and operate mining rigs. Over
 - 🔥 **Overheating System** — rigs that overheat without proper ventilation or cooling.  
 - ⚡ **Dynamic Energy Usage** — mining efficiency based on available power.  
 - 💰 **Reward System** — tangible in-game crypto rewards with trade or crafting potential.  
-- 💬 **Expanded Admin Tools** — better debugging, balance controls, and event triggers.  
 - 🕵️‍♂️ **Cybercrime & Hacking** — other players can **hack** discovered mining rigs/computers to steal or take control of mining progress **if** they meet server-designated requirements (a minimum **Lockpicking** and **Electronics** level). Server hosts will be able to configure the required skill thresholds and toggle hacking on/off for balance and roleplay reasons.
 ---
+
+## ⚠️ Usage
+-⌨️**In Chat**
+--   /mining help
+--   /mining count (Displays the number of active rigs (loaded world objects)
+--   /mining list [limit] (Lists up to N active rigs with coordinates, power, and owner (default 10)
+--   /mining status <x> <y> <z> (Shows details for a specific computer at coordinates)
+--   /mining stop <x> <y> <z> (Stops the mining job at coordinates)
 
 ## 🧩 Installation
 
@@ -35,4 +42,4 @@ Using vanilla Computers Players can find, install, and operate mining rigs. Over
 
 
 ### Manual Install
-1. Don't. this is a WIP and will not help support your implementation. 
+1. Don't. this is a WIP and will not help support your implementation.
