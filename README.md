@@ -13,14 +13,15 @@ Using vanilla Computers Players can find, install, and operate mining rigs. Over
 ## ⚙️ Features
 - 🖥️ **Functional Desktop Computers** — use found or placed computers as mining rigs.  
 - ⚡ **Energy-Dependent Mining** — requires power to operate (via generator or power grid).   
-- 🔍 **Object-Based Integration** — works specifically with the desktop computer object (not just tiles).  
+- 🔍 **Object-Based Integration** — works specifically with the desktop computer object (not just tiles).
+- 💬 **Status indicator** - view who is mining on a computer, power status and more.  
 
 ---
 
 ## 🚧 Future Plans / To Do
 - 🧰 **Admin & Debug Commands** — include chat-based admin options for testing and balancing. 
 - 🎵 **Computer Adio** + Ambient computer noise that attracts Z's
-- 💻 **Expand UI** - View jobs and lifetime earnings. 
+- 💻 **Lifetime Earnings** - View lifetime earnings. 
 - 🔥 **Overheating System** — rigs that overheat without proper ventilation or cooling.  
 - ⚡ **Dynamic Energy Usage** — mining efficiency based on available power.  
 - 💰 **Reward System** — tangible in-game crypto rewards with trade or crafting potential.  
