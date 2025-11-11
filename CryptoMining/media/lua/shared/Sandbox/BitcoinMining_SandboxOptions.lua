@@ -1,0 +1,1 @@
+-- Using media/sandbox-options.txt for Sandbox UI; no Lua registration needed.
