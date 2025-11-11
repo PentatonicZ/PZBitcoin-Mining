@@ -40,8 +40,20 @@ function C.getRewardForInterval()
     if BitcoinMiningCfg and BitcoinMiningCfg.getBatchRewardForInterval then
         return BitcoinMiningCfg.getBatchRewardForInterval()
     end
-    local perHour = SandboxVars and SandboxVars.BitcoinMining and (SandboxVars.BitcoinMining.CoinsPerGameHour or 100) or 100
-    local minutes = SandboxVars and SandboxVars.BitcoinMining and (SandboxVars.BitcoinMining.PayoutIntervalMinutes or 60) or 60
+    -- Fallback to SandboxVars if config module isn't available
+    local perHour
+    local minutes
+    if SandboxVars then
+        if SandboxVars.bitcoinmining then
+            perHour = SandboxVars.bitcoinmining.CoinsPerGameHour or 100
+            minutes = SandboxVars.bitcoinmining.PayoutIntervalMinutes or 60
+        elseif SandboxVars.BitcoinMining then -- compatibility with old namespace
+            perHour = SandboxVars.BitcoinMining.CoinsPerGameHour or 100
+            minutes = SandboxVars.BitcoinMining.PayoutIntervalMinutes or 60
+        end
+    end
+    perHour = perHour or 100
+    minutes = minutes or 60
     local amt = math.floor((perHour * minutes) / 60)
     return (amt > 0) and amt or 1
 end
