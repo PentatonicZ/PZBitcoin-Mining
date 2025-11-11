@@ -1,0 +1,23 @@
+VERSION = 1,
+
+option bitcoinmining.Enabled = {
+    type = boolean, default = true, page = bitcoinmining, translation = bitcoinmining_Enabled,
+}
+option bitcoinmining.CoinsPerGameHour = {
+    type = integer, default = 100, min = 1, max = 100000, page = bitcoinmining, translation = bitcoinmining_CoinsPerGameHour,
+}
+option bitcoinmining.PayoutIntervalMinutes = {
+    type = integer, default = 60, min = 1, max = 1440, page = bitcoinmining, translation = bitcoinmining_PayoutIntervalMinutes,
+}
+option bitcoinmining.PowerRequired = {
+    type = boolean, default = true, page = bitcoinmining, translation = bitcoinmining_PowerRequired,
+}
+option bitcoinmining.RequireDesktopOnly = {
+    type = boolean, default = true, page = bitcoinmining, translation = bitcoinmining_RequireDesktopOnly,
+}
+option bitcoinmining.RequireComputerOn = {
+    type = boolean, default = true, page = bitcoinmining, translation = bitcoinmining_RequireComputerOn,
+}
+option bitcoinmining.AllowManualComputerPower = {
+    type = boolean, default = true, page = bitcoinmining, translation = bitcoinmining_AllowManualComputerPower,
+}
