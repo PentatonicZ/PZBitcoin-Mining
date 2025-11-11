@@ -1,0 +1,24 @@
+UI_BitcoinMining_Enabled = Bitcoin Mining: Enabled
+UI_BitcoinMining_Enabled_tt = Turns the mod on/off.
+
+UI_BitcoinMining_CoinsPerGameHour = Coins per in-game hour (block reward)
+UI_BitcoinMining_CoinsPerGameHour_tt = Global reward rate used for lottery payouts.
+
+UI_BitcoinMining_PayoutIntervalMinutes = Payout interval (real minutes)
+UI_BitcoinMining_PayoutIntervalMinutes_tt = How often the server picks one active miner to receive the full reward.
+
+UI_BitcoinMining_PowerRequired = Requires power
+UI_BitcoinMining_PowerRequired_tt = Mining only runs if the computer has power.
+
+UI_BitcoinMining_GenFuelPerHour = Extra generator fuel per hour
+UI_BitcoinMining_GenFuelPerHour_tt = Additional generator consumption while mining.
+
+UI_BitcoinMining_Heat = Heat added to room
+UI_BitcoinMining_Heat_tt = Extra heat added while mining.
+
+UI_BitcoinMining_NoiseRadius = Noise radius (tiles)
+UI_BitcoinMining_NoiseRadius_tt = Sound radius in tiles while mining.
+
+UI_BitcoinMining_FailIfNoBikiniTools = Fail if BikiniTools missing
+UI_BitcoinMining_FailIfNoBikiniTools_tt = If true, do not accrue pending rewards when BikiniTools is absent.
+Sandbox_BitcoinMining = Bitcoin Mining

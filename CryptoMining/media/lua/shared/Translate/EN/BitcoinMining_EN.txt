@@ -1,0 +1,28 @@
+UI_Mining_NoPower = No power at this computer
+StartStop_StartMining = Start Cryptomining (BikiniTools)
+StartStop_StopMining = Stop Cryptomining
+Tooltip_NoPower = Requires electricity to operate.
+
+# Category title
+Sandbox_BitcoinMining = Bitcoin Mining
+
+# Visible option names
+Sandbox_BitcoinMining_Enabled = Enable Bitcoin Mining
+Sandbox_BitcoinMining_CoinsPerGameHour = Coins per in-game hour
+Sandbox_BitcoinMining_PayoutIntervalMinutes = Payout interval (minutes)
+Sandbox_BitcoinMining_PowerRequired = Require electricity
+
+# If using desktop power features:
+Sandbox_BitcoinMining_RequireDesktopOnly = Desktop computers only
+Sandbox_BitcoinMining_RequireComputerOn = Computer must be turned on
+Sandbox_BitcoinMining_AllowManualComputerPower = Allow manual on/off toggle
+
+# Tooltips (optional but recommended)
+Sandbox_BitcoinMining_Enabled_tooltip = Master switch for the mod.
+Sandbox_BitcoinMining_CoinsPerGameHour_tooltip = Base batch reward rate per in-game hour. Actual payout per draw scales by the interval.
+Sandbox_BitcoinMining_PayoutIntervalMinutes_tooltip = How often (in minutes) the lottery selects a single winner among active rigs.
+Sandbox_BitcoinMining_PowerRequired_tooltip = If true, the tile must have electricity (grid or generator).
+Sandbox_BitcoinMining_RequireDesktopOnly_tooltip = Only treat placed desktop computers as mining rigs.
+Sandbox_BitcoinMining_RequireComputerOn_tooltip = If true, the computer must be toggled ON to mine.
+Sandbox_BitcoinMining_AllowManualComputerPower_tooltip = Adds “Turn On/Off Computer” to the right-click menu.
+

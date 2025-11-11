@@ -1,0 +1,9 @@
+
+Sandbox_bitcoinmining = "Bitcoin Mining",
+Sandbox_bitcoinmining_Enabled = "Enable Bitcoin Mining",
+Sandbox_bitcoinmining_CoinsPerGameHour = "Coins per in-game hour",
+Sandbox_bitcoinmining_PayoutIntervalMinutes = "Payout interval (minutes)",
+Sandbox_bitcoinmining_PowerRequired = "Require electricity",
+Sandbox_bitcoinmining_RequireDesktopOnly = "Desktop computers only",
+Sandbox_bitcoinmining_RequireComputerOn = "Computer must be turned on",
+Sandbox_bitcoinmining_AllowManualComputerPower = "Allow manual on/off toggle",
