@@ -4,7 +4,7 @@
 ---
 
 ## 💾 Overview
-**Zomboid Crypto Miner** is a Project Zomboid mod that introduces a new gameplay mechanic: **cryptocurrency mining** using in-game desktop computers.  
+**Zomboid Crypto Miner** is a Project Zomboid mod that introduces a new gameplay mechanic: **cryptocurrency mining** using desktop computers.  
 Built for **Project Zomboid Build 41**, this mod lets survivors put their spare power and time to use — even when the world has ended.
 
 Players can find, install, and operate **desktop computers** as mining rigs. Over time, these rigs generate in-game "crypto rewards" while consuming electricity and time, offering a unique twist to your survival economy.
@@ -36,4 +36,4 @@ Players can find, install, and operate **desktop computers** as mining rigs. Ove
 
 
 ### Manual Install
-1. Don't.
+1. Don't. this is a WIP and will not help support your implementation. 
