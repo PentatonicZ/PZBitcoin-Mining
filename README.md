@@ -4,23 +4,21 @@
 ---
 
 ## 💾 Overview
-**Zomboid Crypto Miner** is a Project Zomboid mod that introduces a new gameplay mechanic: **cryptocurrency mining** using desktop computers.  
-Built for **Project Zomboid Build 41**, this mod lets survivors put their spare power and time to use — even when the world has ended.
+**Zomboid Crypto Miner** is a Project Zomboid mod that introduces a new gameplay mechanic: **cryptocurrency mining** using desktop computers. Built for **Project Zomboid Build 41**, this mod lets survivors put their spare power and time to use.....even when the world has ended.
 
-Players can find, install, and operate **desktop computers** as mining rigs. Over time, these rigs generate in-game "crypto rewards" while consuming electricity and time, offering a unique twist to your survival economy.
+Using vanilla Computers Players can find, install, and operate mining rigs. Over time, these rigs generate in-game "crypto rewards" while consuming electricity and time, offering a unique twist to your survival economy.
 
 ---
 
 ## ⚙️ Features
 - 🖥️ **Functional Desktop Computers** — use found or placed computers as mining rigs.  
-- ⚡ **Energy-Dependent Mining** — requires power to operate (via generator or power grid).  
-- ⏱️ **Real-Time Mining Simulation** — rigs accumulate mining progress over time.  
-- 🧰 **Admin & Debug Commands** — includes chat-based admin options for testing and balancing.  
+- ⚡ **Energy-Dependent Mining** — requires power to operate (via generator or power grid).   
 - 🔍 **Object-Based Integration** — works specifically with the desktop computer object (not just tiles).  
 
 ---
 
 ## 🚧 Future Plans / To Do
+- 🧰 **Admin & Debug Commands** — include chat-based admin options for testing and balancing. 
 - 🎵 **Computer Adio** + Ambient computer noise that attracts Z's
 - 💻 **Expand UI** - View jobs and lifetime earnings. 
 - 🔥 **Overheating System** — rigs that overheat without proper ventilation or cooling.  
