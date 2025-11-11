@@ -1,4 +1,12 @@
-require("BitcoinMining_Sandbox")
+local ok_cfg, err_cfg = pcall(require, "BitcoinMining_Sandbox")
+if not ok_cfg then
+    print("[PZBitcoinMining] WARN: Sandbox config not loaded: "..tostring(err_cfg))
+end
+BitcoinMiningCfg = BitcoinMiningCfg or {}
+if not BitcoinMiningCfg.isEnabled then function BitcoinMiningCfg.isEnabled() return true end end
+if not BitcoinMiningCfg.getPayoutIntervalMinutes then function BitcoinMiningCfg.getPayoutIntervalMinutes() return 60 end end
+if not BitcoinMiningCfg.getBatchRewardForInterval then function BitcoinMiningCfg.getBatchRewardForInterval() return 1 end end
+
 require("BitcoinMining_Util")
 require("BitcoinMining_Common")
 
@@ -125,7 +133,7 @@ end
 
 -- Scheduler: EveryTenMinutes, check if an interval elapsed and payout accordingly
 local function onEveryTenMinutes()
-    if not BitcoinMiningCfg.isEnabled() then return end
+    if not (BitcoinMiningCfg and BitcoinMiningCfg.isEnabled and BitcoinMiningCfg.isEnabled()) then return end
     local S = getServerState()
     local now = worldMinutes()
     local interval = tonumber(BitcoinMiningCfg.getPayoutIntervalMinutes()) or 60
