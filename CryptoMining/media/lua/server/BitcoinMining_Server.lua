@@ -170,6 +170,10 @@ local function onClientCommand(module, command, player, args)
             return
         end
         local rig = BitcoinMining.getRigData(obj)
+        if rig.active then
+            Util.log("CMD", "Start: already active at %d,%d,%d (owner=%s)", obj:getX(), obj:getY(), obj:getZ(), tostring(rig.ownerName or rig.ownerSteam or rig.ownerOnline))
+            return
+        end
         rig.active = true
         rig.ownerSteam  = args.steamID or rig.ownerSteam
         rig.ownerOnline = args.onlineID or rig.ownerOnline
@@ -185,9 +189,20 @@ local function onClientCommand(module, command, player, args)
             return
         end
         local rig = BitcoinMining.getRigData(obj)
+        -- Only the owner can stop
+        local sid  = args.steamID
+        local oid  = args.onlineID
+        local name = args.username
+        local isOwner = (rig.ownerSteam and sid and rig.ownerSteam == sid)
+            or (rig.ownerOnline and oid and rig.ownerOnline == oid)
+            or (rig.ownerName and name and rig.ownerName == name)
+        if not isOwner then
+            Util.log("CMD", "Stop: denied (not owner) at %d,%d,%d", obj:getX(), obj:getY(), obj:getZ())
+            return
+        end
         rig.active = false
         obj:transmitModData()
-        Util.log("CMD", "Stop: cleared active at %d,%d,%d", obj:getX(), obj:getY(), obj:getZ())
+        Util.log("CMD", "Stop: cleared active at %d,%d,%d by %s", obj:getX(), obj:getY(), obj:getZ(), tostring(name or sid or oid))
         return
     elseif command == "TogglePower" then
         local x,y,z = args.x, args.y, args.z
@@ -201,6 +216,70 @@ local function onClientCommand(module, command, player, args)
         rig.powerOn = p
         obj:transmitModData()
         Util.log("CMD", "TogglePower: %s at %d,%d,%d", p and "ON" or "OFF", obj:getX(), obj:getY(), obj:getZ())
+        return
+    elseif command == "AdminAction" then
+        args = args or {}
+        local action = (args.action or ""):lower()
+        if not isAdminPlayer(player) then
+            adminSay(player, "Mining: admin only command")
+            return
+        end
+        if action == "count" then
+            local rigs = collectActiveRigs()
+            adminSay(player, string.format("Active mining rigs: %d", #rigs))
+            return
+        elseif action == "list" then
+            local limit = tonumber(args.limit) or 10
+            local rigs = collectActiveRigs()
+            adminSay(player, string.format("Active rigs: %d (showing up to %d)", #rigs, limit))
+            for i = 1, math.min(#rigs, limit) do
+                adminSay(player, summarizeRig(rigs[i]))
+            end
+            return
+        elseif action == "status" then
+            local obj = findObjectAt(args.x, args.y, args.z)
+            if not obj then adminSay(player, "No computer at coordinates"); return end
+            local rig = BitcoinMining.getRigData(obj)
+            local s = {
+                string.format("Coords=(%d,%d,%d)", obj:getX(), obj:getY(), obj:getZ()),
+                string.format("Active=%s PowerOn=%s HasPower=%s", tostring(rig.active == true), tostring(rig.powerOn == true), tostring(BitcoinMining.hasPowerAt(obj))),
+                string.format("Owner=%s", tostring(rig.ownerName or rig.ownerSteam or rig.ownerOnline or "unknown")),
+            }
+            for _, line in ipairs(s) do adminSay(player, line) end
+            return
+        elseif action == "power" then
+            local obj = findObjectAt(args.x, args.y, args.z)
+            if not obj then adminSay(player, "No computer at coordinates"); return end
+            local sq = obj:getSquare()
+            local grid = (sq and sq.haveElectricity and sq:haveElectricity()) and true or false
+            local hydro = (getWorld and getWorld() and getWorld().isHydroPowerOn and getWorld():isHydroPowerOn()) and true or false
+            local gen = false
+            if IsoGenerator and IsoGenerator.getFreeGeneratorForSquare and sq then
+                gen = IsoGenerator:getFreeGeneratorForSquare(sq) and true or false
+            end
+            adminSay(player, string.format("PowerCheck grid=%s hydro=%s generator=%s final=%s", tostring(grid), tostring(hydro), tostring(gen), tostring(BitcoinMining.hasPowerAt(obj))))
+            return
+        elseif action == "stop" then
+            local obj = findObjectAt(args.x, args.y, args.z)
+            if not obj then adminSay(player, "No computer at coordinates"); return end
+            local rig = BitcoinMining.getRigData(obj)
+            if rig.active then
+                rig.active = false
+                obj:transmitModData()
+                adminSay(player, string.format("Stopped mining @ (%d,%d,%d)", obj:getX(), obj:getY(), obj:getZ()))
+            else
+                adminSay(player, "Rig not active")
+            end
+            return
+        end
+        return
+    elseif command == "AdminChat" then
+        -- Bridge from client chat -> server handler
+        if args and args.raw then
+            if handleAdminText then
+                handleAdminText(player, tostring(args.raw))
+            end
+        end
         return
     end
 end
@@ -237,3 +316,202 @@ local function onPlayerConnect(player)
 end
 
 Events.OnPlayerConnect.Add(onPlayerConnect)
+
+-- Admin Chat Commands -------------------------------------------------------
+-- Usage (admin only, typed into chat):
+--   /mining help
+--   /mining count
+--   /mining list [limit]
+--   /mining status <x> <y> <z>
+--   /mining stop <x> <y> <z>
+
+local function isAdminPlayer(p)
+    if not p then return false end
+    if p.isAdmin and p:isAdmin() then return true end
+    if p.getAccessLevel then
+        local lvl = (p:getAccessLevel() or ""):lower()
+        if lvl == "admin" or lvl == "moderator" then return true end
+    end
+    return false
+end
+
+local function adminSay(p, msg)
+    if not p or not msg then return end
+    if BTSE and BTSE.Commands and BTSE.Commands.sendSuccessMessage then
+        BTSE.Commands:sendSuccessMessage(p, { tostring(msg) })
+        if BTSE.Commands.sendHaloMessage then
+            BTSE.Commands:sendHaloMessage(p, "success", { tostring(msg) })
+        end
+        return
+    end
+    if p.Say then p:Say(tostring(msg)) else print("[PZBitcoinMining][ADMIN] "..tostring(msg)) end
+end
+
+local function summarizeRig(r)
+    local rig = r.rig or {}
+    local o = r.obj
+    local owner = rig.ownerName or rig.ownerSteam or rig.ownerOnline or "unknown"
+    local pow = rig.powerOn and "On" or "Off"
+    return string.format("@(%d,%d,%d) active=%s power=%s owner=%s", o:getX(), o:getY(), o:getZ(), tostring(rig.active == true), pow, tostring(owner))
+end
+
+local function handleAdminText(player, msg)
+    if type(msg) ~= "string" then return end
+    local text = msg
+    if not text or not text:find("^%s*/mining") then return end
+    if not isAdminPlayer(player) then
+        adminSay(player, "Mining: admin only command")
+        return
+    end
+
+    local args = text:gsub("^%s*/mining%s*", "")
+    args = args or ""
+    local command, rest = args:match("^(%S+)%s*(.*)$")
+    command = (command or ""):lower()
+
+    if command == "" or command == "help" then
+        adminSay(player, "/mining help | count | list [N] | status x y z | stop x y z")
+        return
+    elseif command == "count" then
+        local rigs = collectActiveRigs()
+        adminSay(player, string.format("Active mining rigs: %d", #rigs))
+        return
+    elseif command == "list" then
+        local limit = tonumber(rest) or 10
+        local rigs = collectActiveRigs()
+        adminSay(player, string.format("Active rigs: %d (showing up to %d)", #rigs, limit))
+        for i = 1, math.min(#rigs, limit) do
+            adminSay(player, summarizeRig(rigs[i]))
+        end
+        return
+    elseif command == "status" then
+        local x,y,z = rest:match("^(%-?%d+)%s+(%-?%d+)%s+(%-?%d+)")
+        if not x then adminSay(player, "Usage: /mining status x y z"); return end
+        local obj = findObjectAt(tonumber(x), tonumber(y), tonumber(z))
+        if not obj then adminSay(player, "No computer at coordinates"); return end
+        local rig = BitcoinMining.getRigData(obj)
+        local s = {
+            string.format("Coords=(%d,%d,%d)", obj:getX(), obj:getY(), obj:getZ()),
+            string.format("Active=%s PowerOn=%s HasPower=%s", tostring(rig.active == true), tostring(rig.powerOn == true), tostring(BitcoinMining.hasPowerAt(obj))),
+            string.format("Owner=%s", tostring(rig.ownerName or rig.ownerSteam or rig.ownerOnline or "unknown")),
+        }
+        for _, line in ipairs(s) do adminSay(player, line) end
+        return
+    elseif command == "power" then
+        local x,y,z = rest:match("^(%-?%d+)%s+(%-?%d+)%s+(%-?%d+)")
+        if not x then adminSay(player, "Usage: /mining power x y z"); return end
+        local obj = findObjectAt(tonumber(x), tonumber(y), tonumber(z))
+        if not obj then adminSay(player, "No computer at coordinates"); return end
+        local sq = obj:getSquare()
+        local grid = (sq and sq.haveElectricity and sq:haveElectricity()) and true or false
+        local hydro = (getWorld and getWorld() and getWorld().isHydroPowerOn and getWorld():isHydroPowerOn()) and true or false
+        local gen = false
+        if IsoGenerator and IsoGenerator.getFreeGeneratorForSquare and sq then
+            gen = IsoGenerator:getFreeGeneratorForSquare(sq) and true or false
+        end
+        adminSay(player, string.format("PowerCheck grid=%s hydro=%s generator=%s final=%s", tostring(grid), tostring(hydro), tostring(gen), tostring(BitcoinMining.hasPowerAt(obj))))
+        return
+    elseif command == "stop" then
+        local x,y,z = rest:match("^(%-?%d+)%s+(%-?%d+)%s+(%-?%d+)")
+        if not x then adminSay(player, "Usage: /mining stop x y z"); return end
+        local obj = findObjectAt(tonumber(x), tonumber(y), tonumber(z))
+        if not obj then adminSay(player, "No computer at coordinates"); return end
+        local rig = BitcoinMining.getRigData(obj)
+        if rig.active then
+            rig.active = false
+            obj:transmitModData()
+            adminSay(player, string.format("Stopped mining @ (%d,%d,%d)", obj:getX(), obj:getY(), obj:getZ()))
+        else
+            adminSay(player, "Rig not active")
+        end
+        return
+    else
+        adminSay(player, "Unknown command. Use /mining help")
+        return
+    end
+end
+
+local function onPlayerChat(player, msg)
+    handleAdminText(player, msg)
+end
+
+Events.OnPlayerChat.Add(onPlayerChat)
+
+-- BTSE (PARP) chat integration ---------------------------------------------
+BTSE = BTSE or {}
+BTSE.Commands = BTSE.Commands or {}
+BTSE.Commands.Mining = BTSE.Commands.Mining or {}
+
+local function ensureAdmin(player)
+    if not isAdminPlayer(player) then
+        adminSay(player, "Mining: admin only command")
+        return false
+    end
+    return true
+end
+
+function BTSE.Commands.Mining.count(player, args)
+    if not ensureAdmin(player) then return end
+    local rigs = collectActiveRigs()
+    adminSay(player, string.format("Active mining rigs: %d", #rigs))
+end
+
+function BTSE.Commands.Mining.list(player, args)
+    if not ensureAdmin(player) then return end
+    local limit = tonumber(args and args.limit) or 10
+    local rigs = collectActiveRigs()
+    adminSay(player, string.format("Active rigs: %d (showing up to %d)", #rigs, limit))
+    for i = 1, math.min(#rigs, limit) do
+        adminSay(player, summarizeRig(rigs[i]))
+    end
+end
+
+function BTSE.Commands.Mining.status(player, args)
+    if not ensureAdmin(player) then return end
+    if not args or not args.x then adminSay(player, "Usage: /mining status x y z"); return end
+    local obj = findObjectAt(args.x, args.y, args.z)
+    if not obj then adminSay(player, "No computer at coordinates"); return end
+    local rig = BitcoinMining.getRigData(obj)
+    local s = {
+        string.format("Coords=(%d,%d,%d)", obj:getX(), obj:getY(), obj:getZ()),
+        string.format("Active=%s PowerOn=%s HasPower=%s", tostring(rig.active == true), tostring(rig.powerOn == true), tostring(BitcoinMining.hasPowerAt(obj))),
+        string.format("Owner=%s", tostring(rig.ownerName or rig.ownerSteam or rig.ownerOnline or "unknown")),
+    }
+    for _, line in ipairs(s) do adminSay(player, line) end
+end
+
+function BTSE.Commands.Mining.power(player, args)
+    if not ensureAdmin(player) then return end
+    if not args or not args.x then adminSay(player, "Usage: /mining power x y z"); return end
+    local obj = findObjectAt(args.x, args.y, args.z)
+    if not obj then adminSay(player, "No computer at coordinates"); return end
+    local sq = obj:getSquare()
+    local grid = (sq and sq.haveElectricity and sq:haveElectricity()) and true or false
+    local hydro = (getWorld and getWorld() and getWorld().isHydroPowerOn and getWorld():isHydroPowerOn()) and true or false
+    local gen = false
+    if IsoGenerator and IsoGenerator.getFreeGeneratorForSquare and sq then
+        gen = IsoGenerator:getFreeGeneratorForSquare(sq) and true or false
+    end
+    adminSay(player, string.format("PowerCheck grid=%s hydro=%s generator=%s final=%s", tostring(grid), tostring(hydro), tostring(gen), tostring(BitcoinMining.hasPowerAt(obj))))
+end
+
+function BTSE.Commands.Mining.stop(player, args)
+    if not ensureAdmin(player) then return end
+    if not args or not args.x then adminSay(player, "Usage: /mining stop x y z"); return end
+    local obj = findObjectAt(args.x, args.y, args.z)
+    if not obj then adminSay(player, "No computer at coordinates"); return end
+    local rig = BitcoinMining.getRigData(obj)
+    if rig.active then
+        rig.active = false
+        obj:transmitModData()
+        adminSay(player, string.format("Stopped mining @ (%d,%d,%d)", obj:getX(), obj:getY(), obj:getZ()))
+    else
+        adminSay(player, "Rig not active")
+    end
+end
+
+Events.OnClientCommand.Add(function(moduleName, command, playerObj, args)
+    if moduleName == "btse_mining" and BTSE.Commands.Mining[command] then
+        BTSE.Commands.Mining[command](playerObj, args or {})
+    end
+end)
