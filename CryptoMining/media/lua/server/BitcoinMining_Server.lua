@@ -156,7 +156,9 @@ local function onEveryTenMinutes()
     end
 end
 
-Events.EveryTenMinutes.Add(onEveryTenMinutes)
+if Events and Events.EveryTenMinutes and Events.EveryTenMinutes.Add and isServer and isServer() then
+    Events.EveryTenMinutes.Add(onEveryTenMinutes)
+end
 
 -- Client command handling for start/stop
 local function onClientCommand(module, command, player, args)
@@ -284,7 +286,9 @@ local function onClientCommand(module, command, player, args)
     end
 end
 
-Events.OnClientCommand.Add(onClientCommand)
+if Events and Events.OnClientCommand and Events.OnClientCommand.Add and isServer and isServer() then
+    Events.OnClientCommand.Add(onClientCommand)
+end
 
 -- Pending payout on login
 local function onPlayerConnect(player)
@@ -315,7 +319,9 @@ local function onPlayerConnect(player)
     end
 end
 
-Events.OnPlayerConnect.Add(onPlayerConnect)
+if Events and Events.OnPlayerConnect and Events.OnPlayerConnect.Add and isServer and isServer() then
+    Events.OnPlayerConnect.Add(onPlayerConnect)
+end
 
 -- Admin Chat Commands -------------------------------------------------------
 -- Usage (admin only, typed into chat):
@@ -435,7 +441,9 @@ local function onPlayerChat(player, msg)
     handleAdminText(player, msg)
 end
 
-Events.OnPlayerChat.Add(onPlayerChat)
+if Events and Events.OnPlayerChat and Events.OnPlayerChat.Add and isServer and isServer() then
+    Events.OnPlayerChat.Add(onPlayerChat)
+end
 
 -- BTSE (PARP) chat integration ---------------------------------------------
 BTSE = BTSE or {}
@@ -510,8 +518,10 @@ function BTSE.Commands.Mining.stop(player, args)
     end
 end
 
-Events.OnClientCommand.Add(function(moduleName, command, playerObj, args)
-    if moduleName == "btse_mining" and BTSE.Commands.Mining[command] then
-        BTSE.Commands.Mining[command](playerObj, args or {})
-    end
-end)
+if Events and Events.OnClientCommand and Events.OnClientCommand.Add and isServer and isServer() then
+    Events.OnClientCommand.Add(function(moduleName, command, playerObj, args)
+        if moduleName == "btse_mining" and BTSE.Commands.Mining[command] then
+            BTSE.Commands.Mining[command](playerObj, args or {})
+        end
+    end)
+end
