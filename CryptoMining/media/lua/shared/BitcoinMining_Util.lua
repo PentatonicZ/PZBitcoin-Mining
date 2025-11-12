@@ -69,11 +69,20 @@ BitcoinMining.isDesktopComputer = BitcoinMining.isDesktopComputer or BitcoinMini
 -- Power detection at an object's square
 ----------------------------------------------------
 function BitcoinMining.hasPowerAt(obj)
-    if not obj or not obj.getSquare then return false end
-    local sq = obj:getSquare(); if not sq then return false end
+    if not obj then return false end
+    local sq = obj
+    if sq.getSquare then sq = sq:getSquare() end
+    if not sq then return false end
+
+    -- Grid / hydro power
     if sq.haveElectricity and sq:haveElectricity() then return true end
+    local world = (getWorld and getWorld()) or nil
+    if world and world.isHydroPowerOn and world:isHydroPowerOn() then return true end
+
+    -- Nearby generator powering this square
     if IsoGenerator and IsoGenerator.getFreeGeneratorForSquare then
-        return IsoGenerator:getFreeGeneratorForSquare(sq) ~= nil
+        local gen = IsoGenerator:getFreeGeneratorForSquare(sq)
+        if gen then return true end
     end
     return false
 end
