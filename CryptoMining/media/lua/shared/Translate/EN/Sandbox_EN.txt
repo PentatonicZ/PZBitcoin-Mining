@@ -1,4 +1,3 @@
-
 Sandbox_bitcoinmining = "Bitcoin Mining",
 Sandbox_bitcoinmining_Enabled = "Enable Bitcoin Mining",
 Sandbox_bitcoinmining_CoinsPerGameHour = "Coins per in-game hour",
