@@ -25,4 +25,3 @@ Sandbox_BitcoinMining_PowerRequired_tooltip = If true, the tile must have electr
 Sandbox_BitcoinMining_RequireDesktopOnly_tooltip = Only treat placed desktop computers as mining rigs.
 Sandbox_BitcoinMining_RequireComputerOn_tooltip = If true, the computer must be toggled ON to mine.
 Sandbox_BitcoinMining_AllowManualComputerPower_tooltip = Adds “Turn On/Off Computer” to the right-click menu.
-
